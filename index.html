@@ -191,12 +191,13 @@ function buildVineCache(){
 let vineAnimData=[];
 function initVineAnim(){
   vineAnimData=[];
-  for(let i=0;i<60;i++){
+  for(let i=0;i<8;i++){
     vineAnimData.push({
-      side:Math.floor(Math.random()*4),
-      t:Math.random(),
+      side:i%4,
+      offset:Math.random()*.4,
       phase:Math.random()*Math.PI*2,
-      size:6+Math.random()*10
+      len:.3+Math.random()*.5,
+      dir:Math.random()>.5?1:-1
     });
   }
 }
@@ -204,27 +205,46 @@ function initVineAnim(){
 function drawAnimatedVines(time){
   if(!vineCache)buildVineCache();
   X.drawImage(vineCache,0,0,W,H);
-  for(const leaf of vineAnimData){
-    let px,py,baseAngle;
-    switch(leaf.side){
-      case 0:px=8+Math.sin(time*.4+leaf.phase)*5;py=leaf.t*H;baseAngle=-.3;break;
-      case 1:px=W-8+Math.sin(time*.4+leaf.phase)*5;py=leaf.t*H;baseAngle=Math.PI+.3;break;
-      case 2:px=leaf.t*W;py=8+Math.sin(time*.4+leaf.phase)*5;baseAngle=Math.PI*.5;break;
-      case 3:px=leaf.t*W;py=H-8+Math.sin(time*.4+leaf.phase)*5;baseAngle=-.5;break;
+  const swayAmp=8;
+  for(const v of vineAnimData){
+    const sway=Math.sin(time*.5+v.phase)*swayAmp;
+    X.save();
+    X.globalAlpha=.35;
+    X.strokeStyle='#3a7020';X.lineWidth=2.5;X.lineCap='round';
+    let sx,sy,ex,ey,cp1x,cp1y,cp2x,cp2y;
+    const o=v.offset,t=time*.3+v.phase;
+    const bend=Math.sin(t)*4*v.dir;
+    switch(v.side){
+      case 0:
+        sx=sway+5;sy=H*o;ex=bend+10;ey=H*o+v.len*H*.3;break;
+      case 1:
+        sx=W-5-sway;sy=H*o;ex=W-10-bend;ey=H*o+v.len*H*.3;break;
+      case 2:
+        sx=W*o;sy=sway+5;ex=W*o+v.len*W*.3;ey=bend+10;break;
+      case 3:
+        sx=W*o;sy=H-5-sway;ex=W*o+v.len*W*.3;ey=H-10-bend;break;
     }
-    const sway=Math.sin(time*.6+leaf.phase)*.15;
-    X.save();X.translate(px,py);X.rotate(baseAngle+sway);
-    X.beginPath();
-    const sz=leaf.size;
-    X.moveTo(0,0);
-    X.bezierCurveTo(sz*.2,-sz*.55,sz*.6,-sz*.8,sz*.15,-sz*1.05);
-    X.bezierCurveTo(sz*.05,-sz*.85,0,-sz*.6,0,-sz*.4);
-    X.bezierCurveTo(0,-sz*.6,-sz*.05,-sz*.85,-sz*.15,-sz*1.05);
-    X.bezierCurveTo(-sz*.6,-sz*.8,-sz*.2,-sz*.55,0,0);
-    const lg=X.createRadialGradient(0,-sz*.5,0,0,-sz*.5,sz);
-    lg.addColorStop(0,'#5a9a40');lg.addColorStop(.6,'#4a8a30');lg.addColorStop(1,'#3a7a20');
-    X.fillStyle=lg;X.globalAlpha=.8;X.fill();
+    cp1x=sx+(ex-sx)*.35+Math.sin(t*1.2)*6;
+    cp1y=sy+(ey-sy)*.25+Math.cos(t*.8)*5;
+    cp2x=sx+(ex-sx)*.65+Math.sin(t*.9)*4;
+    cp2y=sy+(ey-sy)*.7+Math.cos(t*1.1)*6;
+    X.beginPath();X.moveTo(sx,sy);X.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,ex,ey);X.stroke();
+    X.strokeStyle='#4a8030';X.lineWidth=1.2;X.globalAlpha=.2;
+    X.beginPath();X.moveTo(sx+1,sy+1);X.bezierCurveTo(cp1x+1,cp1y+1,cp2x+1,cp2y+1,ex+1,ey+1);X.stroke();
     X.restore();
+    for(let i=0;i<4;i++){
+      const t=i/3;
+      const lx=cp1x+t*(cp2x-cp1x),ly=cp1y+t*(cp2y-cp1y);
+      const lsz=5+Math.sin(time*.7+v.phase+i)*3;
+      X.save();X.translate(lx,ly);X.rotate(Math.sin(time*.6+v.phase+i)*.2+v.dir*.5);
+      X.fillStyle='#5a9a40';X.globalAlpha=.6;
+      X.beginPath();X.moveTo(0,0);
+      X.bezierCurveTo(lsz*.3,-lsz*.5,lsz*.7,-lsz*.7,lsz*.2,-lsz);
+      X.bezierCurveTo(lsz*.1,-lsz*.8,0,-lsz*.5,0,-lsz*.3);
+      X.bezierCurveTo(0,-lsz*.5,-lsz*.1,-lsz*.8,-lsz*.2,-lsz);
+      X.bezierCurveTo(-lsz*.7,-lsz*.7,-lsz*.3,-lsz*.5,0,0);
+      X.fill();X.restore();
+    }
   }
 }
 
@@ -643,14 +663,14 @@ class Flower{
     ctx.beginPath();ctx.moveTo(this.x+sw*4+1,this.y+cs*.15+1);
     ctx.bezierCurveTo(this.x+sw*5+5,this.y+sl*.4+1,this.x+sw*6-1,this.y+sl*.7+1,this.x+sw*7+1,this.y+sl+1);
     ctx.stroke();
-    if(Math.random()>.5){
-      ctx.save();ctx.translate(this.x+sw*5+2,this.y+sl*.35);ctx.rotate(-.3+sw);
-      ctx.fillStyle='#4a8030';ctx.globalAlpha=.4;
-      ctx.beginPath();ctx.moveTo(0,0);
-      ctx.bezierCurveTo(5,-8,12,-7,8,0);ctx.bezierCurveTo(12,7,5,8,0,0);ctx.fill();ctx.restore();
-    }
+    ctx.save();ctx.translate(this.x+sw*5+2+(this.seed%7-3),this.y+sl*.35+5+(this.seed%5-2));ctx.rotate(-.3+sw+.06*(this.seed%7-3));
+    ctx.fillStyle='#4a8030';ctx.globalAlpha=.4;
+    ctx.beginPath();ctx.moveTo(0,0);
+    ctx.bezierCurveTo(5,-8,12,-7,8,0);ctx.bezierCurveTo(12,7,5,8,0,0);ctx.fill();ctx.restore();
     ctx.restore();
     ctx.save();ctx.translate(this.x,this.y);ctx.rotate(sw);
+    const col=['#ff7f50','#faf5ee','#f8f8f5','#f096a8','#f0c840','#e05060','#d0a8d8','#f0c8d8','#f0a0b8','#f8f8f5'][this.type];
+    ctx.fillStyle=col;ctx.beginPath();ctx.arc(0,0,cs*.35,0,Math.PI*2);ctx.fill();
     const r=rng(this.seed);
     flowerDrawFns[this.type](ctx,cs,r);
     ctx.restore();
