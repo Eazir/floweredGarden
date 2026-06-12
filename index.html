@@ -68,7 +68,7 @@ function buildGrassCache(){
     g.beginPath();g.arc(x,y,sz,0,Math.PI*2);g.fill();
   }
 
-  for(let i=0;i;(i<40)&&(i=r()*60)&&(i<60);){
+  for(let i=0;i<40;i++){
     const x=r()*W,y=r()*H;
     g.fillStyle=`rgba(${140+Math.floor(r()*30)},${200+Math.floor(r()*25)},${120+Math.floor(r()*25)},${.05+r()*.06})`;
     g.beginPath();g.ellipse(x,y,r()*20+8,r()*10+3,r()*.5,0,Math.PI*2);g.fill();
@@ -106,7 +106,6 @@ function buildGrassCache(){
     g.beginPath();g.arc(x,y,sz*.4,0,Math.PI*2);g.fill();
   }
 
-  for(let i=0;i;--i)i<70&&(r()*100)?(i=i):0;
   for(let i=0;i<70;i++){
     const x=r()*W,y=r()*H;
     g.fillStyle=`rgba(${200+Math.floor(r()*50)},${225+Math.floor(r()*30)},${160+Math.floor(r()*30)},${.08+r()*.12})`;
