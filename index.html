@@ -162,38 +162,38 @@ function buildVineCache(){
     }
     v.restore();
   }
-  const bw=W*.06,bh=H*.06;
-  drawVineStrand(0,0,W,-8,0,bh*.3,W,bh*.3,Math.floor(W/45));
-  drawVineStrand(0,bh*.4,W,bh*.7,0,bh*.6,W,bh*.6,Math.floor(W/55));
-  drawVineStrand(0,H,W,H+8,0,H-bh*.3,W,H-bh*.3,Math.floor(W/45));
-  drawVineStrand(0,H-bh*.4,W,H-bh*.7,0,H-bh*.6,W,H-bh*.6,Math.floor(W/55));
-  drawVineStrand(0,0,bw*.6,0,bw*.3,0,bw*.5,0,Math.floor(H/50));
-  drawVineStrand(bw,0,bw*1.4,H,bw*1.1,0,bw*1.3,H,Math.floor(H/55));
-  drawVineStrand(W,0,W-bw*.6,0,W-bw*.3,0,W-bw*.5,0,Math.floor(H/50));
-  drawVineStrand(W-bw,0,W-bw*1.4,H,W-bw*1.1,0,W-bw*1.3,H,Math.floor(H/55));
-  for(let i=0;i<60;i++){
-    const cx=r()*W,cy=Math.random()<.5?r()*bh:H-r()*H*.05;
-    drawLeaf(cx,cy,6+r()*12,Math.random()<.5?.5+r()*.5:-.5-r()*.5);
+  const bw=W*.025,bh=H*.025;
+  drawVineStrand(0,0,W,bh,0,bh*.4,W,bh*.4,Math.floor(W/60));
+  drawVineStrand(0,bh*.6,W,bh,0,bh*.8,W,bh*.8,Math.floor(W/70));
+  drawVineStrand(0,H,W,H-bh,0,H-bh*.4,W,H-bh*.4,Math.floor(W/60));
+  drawVineStrand(0,H-bh*.6,W,H-bh,0,H-bh*.8,W,H-bh*.8,Math.floor(W/70));
+  drawVineStrand(0,0,bw,H,bw*.3,0,bw*.3,H,Math.floor(H/55));
+  drawVineStrand(bw*1.2,0,bw*1.2,H,bw*1.4,0,bw*1.4,H,Math.floor(H/65));
+  drawVineStrand(W,0,W-bw,H,W-bw*.3,0,W-bw*.3,H,Math.floor(H/55));
+  drawVineStrand(W-bw*1.2,0,W-bw*1.2,H,W-bw*1.4,0,W-bw*1.4,H,Math.floor(H/65));
+  for(let i=0;i<30;i++){
+    const cx=r()*W,cy=Math.random()<.5?r()*bh*.8:H-r()*H*.02;
+    drawLeaf(cx,cy,5+r()*8,Math.random()<.5?.5+r()*.5:-.5-r()*.5);
   }
-  for(let i=0;i<60;i++){
-    const cy=r()*H,cx=Math.random()<.5?r()*bw:W-r()*W*.05;
-    drawLeaf(cx,cy,6+r()*12,Math.random()<.5?0+r()*1:Math.PI-r()*1);
+  for(let i=0;i<30;i++){
+    const cy=r()*H,cx=Math.random()<.5?r()*bw*.8:W-r()*W*.02;
+    drawLeaf(cx,cy,5+r()*8,Math.random()<.5?0+r()*1:Math.PI-r()*1);
   }
 }
 
 let vineAnimData=[];
 function initVineAnim(){
   vineAnimData=[];
-  const bw=.06,bh=.06;
+  const bw=.025,bh=.025;
   const sides=[
     {sx:0,sy:0,ex:1,ey:0,dir:0},
-    {sx:0,sy:bh*.4,ex:1,ey:bh*.7,dir:0},
+    {sx:0,sy:bh,ex:1,ey:bh,dir:0},
     {sx:0,sy:1,ex:1,ey:1,dir:0},
-    {sx:0,sy:1-bh*.4,ex:1,ey:1-bh*.7,dir:0},
+    {sx:0,sy:1-bh,ex:1,ey:1-bh,dir:0},
     {sx:0,sy:0,ex:0,ey:1,dir:1},
-    {sx:bw,sy:0,ex:bw*1.4,ey:1,dir:1},
+    {sx:bw,sy:0,ex:bw,ey:1,dir:1},
     {sx:1,sy:0,ex:1,ey:1,dir:1},
-    {sx:1-bw,sy:0,ex:1-bw*1.4,ey:1,dir:1},
+    {sx:1-bw,sy:0,ex:1-bw,ey:1,dir:1},
   ];
   for(const s of sides){
     vineAnimData.push({
@@ -220,9 +220,9 @@ function drawAnimatedVines(time){
       cpx1=sx+sway*W*2;cp1y=sy+(ey-sy)*.3;
       cpx2=ex+sway2*W*2;cp2y=sy+(ey-sy)*.7;
     }
-    X.strokeStyle='#1a5a0a';X.lineWidth=5;X.globalAlpha=.4;X.lineCap='round';
+    X.strokeStyle='#1a5a0a';X.lineWidth=3;X.globalAlpha=.3;X.lineCap='round';
     X.beginPath();X.moveTo(sx,sy);X.bezierCurveTo(cpx1,cp1y,cpx2,cp2y,ex,ey);X.stroke();
-    X.strokeStyle='#2a6a15';X.lineWidth=2.5;X.globalAlpha=.35;
+    X.strokeStyle='#2a6a15';X.lineWidth=1.5;X.globalAlpha=.25;
     X.beginPath();X.moveTo(sx+1,sy+1);X.bezierCurveTo(cpx1+1,cp1y+1,cpx2+1,cp2y+1,ex+1,ey+1);X.stroke();
     const numLeaves=Math.floor((v.dir===0?W:H)/120)+8;
     for(let i=0;i<numLeaves;i++){
@@ -256,7 +256,7 @@ function gerbera(ctx,sz,r){
   const n=24+Math.floor(r()*6);
   const pl=.85+r()*.1;
   const pw=.2+r()*.04;
-  const cols=['#ff7f50','#ff6b35','#ff8c69','#ff6347'];
+  const cols=['#ff7f50','#ff6b35','#ff8c69','#ff6347','#ffb347','#ff4777','#ffaaaa','#ffe066'];
   const c=cols[Math.floor(r()*cols.length)];
   ctx.save();ctx.scale(sz,sz);
   for(let i=0;i<n;i++){
@@ -295,7 +295,7 @@ function gerbera(ctx,sz,r){
 
 function lily(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=['#faf5ee','#f5eee5','#fee9d6'];
+  const cols=['#faf5ee','#f5eee5','#fee9d6','#fce4e0','#f0d0d0','#ffe8cc','#fff0e0','#fdd0c8'];
   const bc=cols[Math.floor(r()*cols.length)];
   const pl=.95,pw=.28;
   for(let layer=0;layer<2;layer++){
@@ -337,36 +337,36 @@ function lily(ctx,sz,r){
 
 function lilyValley(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const stemH=1.1+r()*.2;
-  const bend=.4+r()*.25;
+  const stemH=1.3+r()*.25;
+  const bend=.45+r()*.2;
   const dir=r()>.5?1:-1;
-  ctx.strokeStyle='#4a8030';ctx.lineWidth=.04;ctx.globalAlpha=.55;
+  ctx.strokeStyle='#4a8030';ctx.lineWidth=.035;ctx.globalAlpha=.5;
   ctx.lineCap='round';
-  const ex=dir*bend*1.5,ey=.05-stemH;
+  const ex=dir*bend*1.6,ey=.05-stemH;
   ctx.beginPath();ctx.moveTo(0,.05);
-  ctx.bezierCurveTo(dir*bend*.15,.05-stemH*.1,dir*bend*.85,.05-stemH*.35,ex,ey);
+  ctx.bezierCurveTo(dir*bend*.2,.05-stemH*.08,dir*bend*.9,.05-stemH*.3,ex,ey);
   ctx.stroke();
-  ctx.strokeStyle='#3a7020';ctx.lineWidth=.018;ctx.globalAlpha=.25;
-  ctx.beginPath();ctx.moveTo(dir*.3,.05);
-  ctx.bezierCurveTo(dir*bend*.15+.3,.05-stemH*.1,dir*bend*.85+.3,.05-stemH*.35,ex+dir*.3,ey);
+  ctx.strokeStyle='#3a7020';ctx.lineWidth=.015;ctx.globalAlpha=.2;
+  ctx.beginPath();ctx.moveTo(dir*.2,.05);
+  ctx.bezierCurveTo(dir*bend*.2+.2,.05-stemH*.08,dir*bend*.9+.2,.05-stemH*.3,ex+dir*.2,ey);
   ctx.stroke();
-  const bells=5+Math.floor(r()*5);
+  const bells=6+Math.floor(r()*6);
   for(let i=0;i<bells;i++){
-    const t=.08+(i/(bells-1))*.85;
-    const bx=dir*bend*1.5*t,by=(.05-stemH*t)+(1-t)*.08;
-    const bs=.22+r()*.08;
-    const hangAngle=.15-.25*t+dir*.35;
+    const t=.06+(i/(bells-1))*.88;
+    const bx=dir*bend*1.6*t,by=(.05-stemH*t)+(1-t)*.06;
+    const bs=.35+r()*.1;
+    const hangAngle=.1-.2*t+dir*.3;
     ctx.save();ctx.translate(bx,by);ctx.rotate(hangAngle);
     ctx.beginPath();ctx.moveTo(0,0);
-    ctx.quadraticCurveTo(bs*.4,bs*.05,bs*.4,-bs*.25);
-    ctx.quadraticCurveTo(bs*.2,-bs*.5,0,-bs*.55);
-    ctx.quadraticCurveTo(-bs*.2,-bs*.5,-bs*.4,-bs*.25);
-    ctx.quadraticCurveTo(-bs*.4,bs*.05,0,0);
+    ctx.quadraticCurveTo(bs*.35,bs*.04,bs*.35,-bs*.22);
+    ctx.quadraticCurveTo(bs*.18,-bs*.45,0,-bs*.5);
+    ctx.quadraticCurveTo(-bs*.18,-bs*.45,-bs*.35,-bs*.22);
+    ctx.quadraticCurveTo(-bs*.35,bs*.04,0,0);
     ctx.closePath();
     ctx.fillStyle='#f8f8f5';ctx.fill();
-    ctx.strokeStyle='rgba(100,120,90,.25)';ctx.lineWidth=.02;ctx.stroke();
-    ctx.beginPath();ctx.arc(0,-bs*.18,bs*.12,0,Math.PI*2);
-    ctx.fillStyle='rgba(170,200,150,.45)';ctx.fill();
+    ctx.strokeStyle='rgba(100,120,90,.2)';ctx.lineWidth=.02;ctx.stroke();
+    ctx.beginPath();ctx.arc(0,-bs*.18,bs*.14,0,Math.PI*2);
+    ctx.fillStyle='rgba(160,190,140,.4)';ctx.fill();
     ctx.restore();
   }
   ctx.restore();
@@ -374,7 +374,7 @@ function lilyValley(ctx,sz,r){
 
 function carnation(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=['#f096a8','#e888a0','#f0b0c0','#e898a8'];
+  const cols=['#f096a8','#e888a0','#f0b0c0','#e898a8','#e06060','#f0d0d0','#f0e8c0','#e0a0c0','#f0d0b0','#d08090'];
   const bc=cols[Math.floor(r()*cols.length)];
   for(let l=0;l<5;l++){
     const ls=.15+(l/5)*.85,cnt=8+l*4;
@@ -407,7 +407,7 @@ function carnation(ctx,sz,r){
 
 function chrysanthemum(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=['#f0c840','#f0b030','#e8a838','#f8d050'];
+  const cols=['#f0c840','#f0b030','#e8a838','#f8d050','#f0e0e0','#f0c0c0','#e8a0a0','#e8c8a0','#d0a060','#f0d8b0'];
   const bc=cols[Math.floor(r()*cols.length)];
   for(let layer=0;layer<4;layer++){
     const ls=.2+layer*.22,cnt=35-layer*4;
@@ -431,7 +431,7 @@ function chrysanthemum(ctx,sz,r){
 
 function tulip(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=[['#e05060','#f09090'],['#f06850','#f89870'],['#d06080','#e898a8'],['#f0a050','#f8c870']];
+  const cols=[['#e05060','#f09090'],['#f06850','#f89870'],['#d06080','#e898a8'],['#f0a050','#f8c870'],['#a060d0','#c898e8'],['#f0e060','#f8f0a0'],['#f0f0f0','#ffffff'],['#d03030','#f06060'],['#f0b0c0','#f8d0d8'],['#f08040','#f0a060']];
   const c=cols[Math.floor(r()*cols.length)];
   const ch=.75;
   for(let i=0;i<3;i++){
@@ -477,7 +477,7 @@ function tulip(ctx,sz,r){
 
 function orchid(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=[['#d0a8d8','#e8c0e8'],['#c898d0','#e0b0e0'],['#e0b0c8','#f0d0d8']];
+  const cols=[['#d0a8d8','#e8c0e8'],['#c898d0','#e0b0e0'],['#e0b0c8','#f0d0d8'],['#f0e8e0','#fff8f0'],['#f0d860','#f8e890'],['#f0b0d0','#f8d0e8']];
   const c=cols[Math.floor(r()*cols.length)];
   const pl=.7,pw=.18;
   for(let i=0;i<3;i++){
@@ -523,7 +523,7 @@ function orchid(ctx,sz,r){
 
 function lotus(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=['#f0c8d8','#e8b8d0','#f5d8e0','#f0d0e0'];
+  const cols=['#f0c8d8','#e8b8d0','#f5d8e0','#f0d0e0','#fff0f0','#f0d0c8','#f0e0e0','#f0c0c8'];
   const bc=cols[Math.floor(r()*cols.length)];
   for(let layer=0;layer<3;layer++){
     const cnt=10-layer*2,ls=.3+layer*.35,pw=.18+layer*.03;
@@ -547,7 +547,7 @@ function lotus(ctx,sz,r){
 
 function peony(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
-  const cols=['#f0a0b8','#e888a8','#f0b8c8','#e8a0a8','#f5c0d0'];
+  const cols=['#f0a0b8','#e888a8','#f0b8c8','#e8a0a8','#f5c0d0','#fff0f0','#f0c8c0','#f0d0d8','#e06080','#f0d0b0'];
   const bc=cols[Math.floor(r()*cols.length)];
   for(let l=0;l<5;l++){
     const ls=.12+(l/5)*.88,cnt=6+l*3,pw=.1+l*.025;
@@ -573,6 +573,8 @@ function peony(ctx,sz,r){
 function daisy(ctx,sz,r){
   ctx.save();ctx.scale(sz,sz);
   const n=16+Math.floor(r()*5),pl=.85+r()*.08,pw=.18+r()*.04;
+  const cols=['#f8f8f5','#fff0f0','#fff8e0','#ffe8d0','#f0e8ff'];
+  const pc=cols[Math.floor(r()*cols.length)];
   for(let i=0;i<n;i++){
     const a=(i/n)*Math.PI*2;
     ctx.save();ctx.rotate(a);
@@ -580,7 +582,7 @@ function daisy(ctx,sz,r){
     ctx.quadraticCurveTo(pl*.35,-pw,pl*1.05,-.02);
     ctx.quadraticCurveTo(pl*.35,pw,0,0);
     ctx.closePath();
-    ctx.fillStyle='#f8f8f5';ctx.fill();
+    ctx.fillStyle=pc;ctx.fill();
     ctx.strokeStyle='rgba(120,120,110,.2)';ctx.lineWidth=.04;ctx.stroke();
     ctx.restore();
   }
@@ -591,7 +593,7 @@ function daisy(ctx,sz,r){
     ctx.quadraticCurveTo(pl*.3,-pw*.7,pl*.8,-.02);
     ctx.quadraticCurveTo(pl*.3,pw*.7,0,0);
     ctx.closePath();
-    ctx.fillStyle='#f0f0ea';ctx.fill();
+    ctx.fillStyle=pc;ctx.fill();
     ctx.strokeStyle='rgba(120,120,110,.12)';ctx.lineWidth=.03;ctx.stroke();
     ctx.restore();
   }
@@ -667,10 +669,6 @@ class Flower{
     ctx.bezierCurveTo(5,-8,12,-7,8,0);ctx.bezierCurveTo(12,7,5,8,0,0);ctx.fill();ctx.restore();
     ctx.restore();
     ctx.save();ctx.translate(this.x,this.y);ctx.rotate(sw);
-    if(this.type!==2){
-      const col=['#ff7f50','#faf5ee','','#f096a8','#f0c840','#e05060','#d0a8d8','#f0c8d8','#f0a0b8','#f8f8f5'][this.type];
-      ctx.fillStyle=col;ctx.beginPath();ctx.arc(0,0,cs*.35,0,Math.PI*2);ctx.fill();
-    }
     const r=rng(this.seed);
     flowerDrawFns[this.type](ctx,cs,r);
     ctx.restore();
